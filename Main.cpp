@@ -18,9 +18,9 @@ int main()
 			cout << endl << "Split" << endl;
 			if (params[1] == "key" && params[2] != " " && params[3] == "value" && params[4] != " ") {
 				cout << "You made it";
-				create(stoi(params[2]), params[4]);
-				cout << "inserted";
-				TraverseSearchTree();
+				//create(stoi(params[2]), params[4]);
+				//cout << "inserted";
+				//TraverseSearchTree();
 			}
 		}
 	}

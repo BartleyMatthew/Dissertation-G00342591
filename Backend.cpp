@@ -4,70 +4,70 @@
 #include "Backend.h"
 using namespace std;
 
-class SearchTree
+// node class
+class Node
 {
 public:
-    int Key;
-    string Value;
-    SearchTree* Left;
-    SearchTree* Right;
-    SearchTree* Parent;
-    SearchTree* Root;
+    // nodes must have at least t-1 keys and most 2t -1
+    // this does not apply to roots
+    // we set these bounds with t/minimum degree
+  
+    int *keys; // array of keys
+    string *values; // array of values
+    Node** children; // array of pointers for children
+    int t; // minimum degree
+    int numKey; // number of keys
+    bool leaf; // is it a leaf node
+
+    // constructor
+    // deg is to distinguish itself from int t
+    public: Node(int deg, bool isLeaf);
+          void traverseTree();
+
+    // so we can access private members later
+    friend class Tree;
 };
 
-SearchTree* root;
+// tree class
+class Tree {
+    Tree* root; // pointer to access the route
+    int t; // min degree
+    // constructor
+    // we use this to initialise a tree as an empty tree
+    public: Tree(int deg) { root = NULL; t = deg; };
+};
 
-SearchTree* createKeyVal(SearchTree * node,int key, string value)
-{
-    if (node == NULL)
-    {
-        node = new SearchTree;
-        node->Key = key;
-        node->Value = value;
-        node->Left = NULL;
-        node->Right = NULL;
-        node->Parent = NULL;
-        node->Root = NULL;
+// node constructor for node class
+Node:: Node(int deg, bool isLeaf) {
+    t = deg;
+    leaf = isLeaf;
+
+    // sets the max number of keys possible and children
+    keys = new int[2 * t - 1];
+    children = new Node * [2 * t];
+
+    // set starting number of keys to 0
+    numKey = 0;
+};
+
+
+// for traversing through all nodes that derive from this node 
+// Node:: to show traverse() belongs to the node class and isn't derived from other classes like tree
+void Node::traverseTree(){
+    int i;
+    for (i = 0; i < numKey; i++) {
+        if (leaf == false) {
+            // if it isn't a leaf then traverse into it's rubroot child
+            children[i]->traverseTree();
+        }
+        else {
+            // if it's a leaf node print it's key
+            cout << keys[i] << endl;
+        }
     }
-    // greater than node's key go to right subtree
-    else if (node->Key < key)
-    {
-        node->Right = createKeyVal(node->Right, key, value);
-        node->Right->Parent = node;
+    // print last childs key
+    if (leaf == false) {
+        children[i]->traverseTree();
     }
-    // smaller than node's key go to left 
-    else
-    {
-        node->Left = createKeyVal(node->Left, key, value);
-        node->Left->Parent = node;
-    }
-    return node;
-}
-
-void TraverseSearchTree(SearchTree* node)
-{
-    // exit if no node
-    if (node == NULL)
-        return;
-
-    // go to smallest key
-    TraverseSearchTree(node->Left);
-
-    // Print the key
-    cout << node->Key << endl;
-    cout << node->Value << endl;
-
-    // go to largest key
-    TraverseSearchTree(node->Right);
-}
-
-void create(int key,string value)
-{
-    root = createKeyVal(root,key, value);
-}
-
-void TraverseSearchTree()
-{
-    TraverseSearchTree(root);
-    cout << endl;
+        
 }
