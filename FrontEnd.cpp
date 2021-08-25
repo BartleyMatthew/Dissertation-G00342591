@@ -8,8 +8,6 @@ string commandName;
 string commandToSplit;
 string params[5];
 
-
-
 void getCommandType(string command) {
 	if (command.rfind("create", 0) == 0) { 
 		commandType = "create";
