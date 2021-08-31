@@ -72,7 +72,7 @@ class Node
       // search for a key
       Node* search(int k);
 
-      // lets us access node paramaters in Tree functions
+      // lets us access node parameters in Tree functions
       friend class Tree;
 };
 

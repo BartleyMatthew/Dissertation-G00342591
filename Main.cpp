@@ -21,12 +21,12 @@ int main()
 		// we use getline since cin just takes in the first word and not spaces
 		getline(cin, command, '\n');
 		cout << endl;
-		// add a ' ' so the splitParams() function returns every paramater correctly
+		// add a ' ' so the splitParams() function returns every parametercorrectly
 		command += ' ';
 		// get command type
 		getCommandType(command);
 
-		// if command is "create" then split paramaters and if the next input isn't  blank
+		// if command is "create" then split parameters and if the next input isn't  blank
 		// define a path then check if database exists
 		// print if it does otherwise create new file of that path
 		// else print invalid command
@@ -44,7 +44,7 @@ int main()
 				}
 			}
 		}
-		// if command is "use" then split the paramaters and if the second parameter isn't empty
+		// if command is "use" then split the parameters and if the second parameter isn't empty
 		// check if the database exists and if it does then read in it's value(if it's blank it won't read any in)
 		// and exit the do while loop
 		// else output that the database doesnt exist
@@ -65,9 +65,9 @@ int main()
 			}
 		}
 		// if command is "remove"
-		// check if the second paramater is valid then check if it exists
+		// check if the second parameter is valid then check if it exists
 		// if it exists then attempt to delete the associated file and output if successful or not
-		// else the paramaters are invalid
+		// else the parameters are invalid
 		else if (commandType == "remove") {
 			splitParams(command, 2);
 			if (params[1].empty() != true)
@@ -112,7 +112,7 @@ int main()
 		command += ' ';
 		getCommandType(command);
 		// if command is "insert"
-		// check if the second parameter is key and the third paramater is valid
+		// check if the second parameter is key and the third parameter is valid
 		// check if the fourth parameter is value and the fourth parameter is valid
 		// if it exists then insert the key and it's associated value
 		// update tree in file then
@@ -126,9 +126,9 @@ int main()
 			}
 		}
 		// if command is "remove"
-		// check if the second parameter is key and the third paramater is valid then check if it exists
+		// check if the second parameter is key and the third parameter is valid then check if it exists
 		// if it exists then delete the key and it's associated value
-		// else the paramaters are invalid
+		// else the parameters are invalid
 		// once removed, store the current tree to file
 		// we do this in order to prevent data loss in case of a crash
 		else if (commandType == "remove") {
@@ -141,7 +141,7 @@ int main()
 			}
 		}
 		// if command is "update"
-		// check if the second parameter is key and the third paramater is valid
+		// check if the second parameter is key and the third parameter is valid
 		// check if the fourth parameter is value and the fourth parameter is valid
 		// if it exists then update the key and it's associated value
 		// update tree in file then

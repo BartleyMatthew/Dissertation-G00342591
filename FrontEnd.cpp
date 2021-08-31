@@ -43,7 +43,7 @@ void getCommandType(string command) {
 	}
 }
 
-// splits paramaters 
+// splits parameters 
 void splitParams(string command, int paramCount) {
 	int j = 0;
 	int pos = 0;
