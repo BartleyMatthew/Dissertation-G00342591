@@ -1,8 +1,36 @@
 #include <cstddef>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include "Backend.h"
 
+string path;
+fstream file;
+
+// create new file
+void createFile(string path) {
+    // we use ofstream here as ifstream throws an exception is file isn't found
+    ofstream newFile(path + ".txt");
+    // close new file
+    newFile.close();
+}
+
+// check if a database file exists
+bool dbExists(string path)
+{
+    // returns false is theres no stream associated with the file
+    file.open(path + ".txt");
+    if(file.is_open())
+    {
+        file.close();
+        return true;
+    }
+    else {
+        file.close();
+        return false;
+    }
+
+}
 // node constructor for node class
 Node:: Node(int deg, bool isLeaf) {
     t = deg;
@@ -17,7 +45,7 @@ Node:: Node(int deg, bool isLeaf) {
 
 };
 
-// for traversing through all nodes that derive from this node 
+// for navigating through all nodes that derive from this node 
 // and prints their keys and values
 // Node:: to show navigate() belongs to the node class and isn't derived from other classes like tree
 void Node::navigateTree(){
@@ -37,44 +65,82 @@ void Node::navigateTree(){
         
 }
 
+// populates the tree with the key and values
+// function is built on the idea that the file is just a key and a value on each line
+void Tree::populateTree(string path)
+{
+    // opens file
+    file.open(path + ".txt");
+    // while loop until the file is at the end
+    while (!file.fail())
+    {
+        int key;
+        string value;
+        // take values from file then insert into tree
+        file >> key >> value;
+        insert(key, value);    
+    }
+    // close file
+    file.close();
+}
+
+void Node::storeTree()
+{
+    int i;
+    for (i = 0; i < numKey; i++) {
+        if (leaf == false) {
+            children[i]->storeTree();
+        }
+        // if it's a leaf node print it's key and value
+        file << keys[i] << ' ' << values[i] << endl;
+    }
+    // print last childs key and value
+    if (leaf == false) {
+        children[i]->storeTree();
+    }  
+}
+
 // main insert function for inserting a key/val
 void Tree::insert(int k,string v)
 {
-    // if tree is empty
-    if (root == NULL)
-    {
-        // create and populate a new root
-        root = new Node(t, true);
-        root-> keys[0] = k;  // insert key
-        root-> values[0] = v; // insert value
-        root-> numKey = 1;  // update number of keys in root
-    }
-    else // if tree isnt empty
-    {
-        // if the root is full create a new root and increase the height of the B tree
-        if (root->numKey == 2*t - 1)
+    if (v.empty() == false) {
+        // if tree is empty
+        if (root == NULL)
         {
-            // create a new root and make the current root the child of this new root
-            Node *newRoot = new Node(t, false);
-            newRoot->children[0] = root;
-            // then split the old root/now child root and move the key
-            newRoot->split(0, root);
-
-            // allocate a new key/val to one of the child nodes
-            int i = 0;
-            if (newRoot->keys[0] < k) {
-                i++;
-            } 
-            newRoot->children[i]->insertInVacant(k,v);
-
-            // set the new root
-            root = newRoot;
+            // create and populate a new root
+            root = new Node(t, true);
+            root->keys[0] = k;  // insert key
+            root->values[0] = v; // insert value
+            root->numKey = 1;  // update number of keys in root
         }
-        // insert the key val into a non full root
-        else {
-            root->insertInVacant(k, v);
+        else // if tree isnt empty
+        {
+            // if the root is full create a new root and increase the height of the B tree
+            if (root->numKey == 2 * t - 1)
+            {
+                // create a new root and make the current root the child of this new root
+                Node* newRoot = new Node(t, false);
+                newRoot->children[0] = root;
+                // then split the old root/now child root and move the key
+                newRoot->split(0, root);
+
+                // allocate a new key/val to one of the child nodes
+                int i = 0;
+                if (newRoot->keys[0] < k) {
+                    i++;
+                }
+                newRoot->children[i]->insertInVacant(k, v);
+
+                // set the new root
+                root = newRoot;
+            }
+            // insert the key val into a non full root
+            else {
+                root->insertInVacant(k, v);
+            }
         }
     }
+        
 }
 
 // inserts if node isn't full
@@ -469,6 +535,7 @@ Node* Node::search(int k)
         
     // if key is found then return this node
     if (keys[i] == k) {
+        cout << endl << "Key: " << keys[i] << " Value: " << values[i];
         return this;
     }
         

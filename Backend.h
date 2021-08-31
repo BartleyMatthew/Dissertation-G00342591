@@ -2,6 +2,14 @@
 #define BACKEND_H
 #include <string>
 using namespace std;
+extern string path;
+extern fstream file;
+
+// create file
+void createFile(string path);
+// check if file existss
+bool dbExists(string path);
+
 // node class
 class Node
 {
@@ -22,9 +30,12 @@ class Node
       // traverse all nodes in a tree
       void navigateTree();
 
+      // write tree to file
+      void storeTree();
+
       // splits children of a node if full
       void split(int i, Node* y);
-
+      
       // insert into node if not full
       void insertInVacant(int key, string value);
 
@@ -78,14 +89,22 @@ class Tree {
       // remove key and it's associated val from b tree
       void remove(int k);
 
+      // populate tree
+      void populateTree(string path);
+
+      // write tree to file by looping through the tree and storing each value to file similar to how we print the tree
+      void storeTree()
+      {
+          if (root != NULL) root->storeTree();
+      }
+
       Node* search(int k) {
           return (root == NULL) ? NULL : root->search(k);
       }
 
-      void traverseTree()
+      void navigateTree()
       {
-
-          if (root != NULL) root->traverseTree();
+          if (root != NULL) root->navigateTree();
       }
 };
 
